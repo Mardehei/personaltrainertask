@@ -64,6 +64,7 @@ export default function Customerlist() {
    }
 
    const columns = [
+
       {
          Header: 'Firstname',
          accessor: 'firstname'
@@ -93,10 +94,21 @@ export default function Customerlist() {
          accessor: 'phone'
       },
       {
+			title: "Add training",
+			Cell: row => (
+				<Addtraining
+					saveTraining={saveTraining}
+					customerId={Addtraining.customerId}
+				/>
+			),
+			sorting: false,
+         filterable: false
+		},
+      {
          sortable: false,
          filterable: false,
          width: 100,
-         Cell: row => <Button variant="contained" color='secondary' size='small'>
+         Cell: row => <Button variant="contained" color='error' size='small'>
          <Editcustomer updateCustomer ={updateCustomer} customer={row.original}/>
          </Button>
       },
@@ -107,21 +119,6 @@ export default function Customerlist() {
          accessor: 'links[0].href',
          Cell: row => <Button variant="contained" color='error' size='big'
           onClick={() => deleteCustomer(row.value)}>Delete</Button>
-      },
-      {
-         sortable: false,
-         filterable: false,
-         width: 0,
-         header: '',
-         field: 'links.0.href',
-         width: 150,
-         cellRendererFramework: params  =>
-         <Addtraining 
-             link={params.value} 
-             training={params.data} 
-             saveTraining={saveTraining}
-             customerId={params.value}
-         />
       }
    ]
 

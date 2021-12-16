@@ -4,26 +4,19 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 
 export default function Addtraining(props) {
 	const [open, setOpen] = useState(false);
-	const [customers, setCustomers] = React.useState([]);
+	const [customerId, setCustomerId] = useState([]);
 	const [training, setTraining] = useState({
 		date: '', duration: '', activity: '', customer: props.customerId
 	});
 
-	const getCustomers = () => {
-		fetch("https://customerrest.herokuapp.com/api/customers")
-			.then((response) => response.json())
-			.then((data) => setCustomers(data.content))
-			.catch((err) => console.error(err));
-	};
-
 	const handleClickOpen = () => {
 		setOpen(true);
-		getCustomers();
+
 	};
+
 
 	const handleClose = () => {
 		setOpen(false);
@@ -33,23 +26,22 @@ export default function Addtraining(props) {
 		setTraining({ ...training, [event.target.name]: event.target.value });
 	};
 
-	const handleListItemClick = (value) => {
-		setTraining({ ...training, customer: value.links[0].href });
-		handleClose();
-	};
-
-	const saveTraining = () => {
-		props.addTraining(training);
+	const addTraining = () => {
+		fetch('https://customerrest.herokuapp.com/api/customers')
+      .then(response => response.json())
+      .then(data => setCustomerId(data.content.links.href))
+		props.saveTraining(training);
 		handleClose();
 	};
 
 	return (
 		<div >
-			<input
-            type='button'
-            value='Add training'
+			<Button
+				color="error"
+				size="medium"
             onClick={handleClickOpen}
-         />
+			> 
+         </Button>
 			<Dialog open={open} onClose={handleClose}>
 				<DialogContent >
 					<TextField
@@ -77,31 +69,12 @@ export default function Addtraining(props) {
 						label="Activity"
 						fullWidth
 					/>
-					<TextField
-						id="outlined-basic"
-						select
-						margin="dense"
-						variant="outlined"
-						label="Customer"
-						onChange={(e) => handleInputChange(e)}
-						name="customer"
-						value={training.activity}
-						SelectProps={{
-							native: true
-						}}
-					>
-						{customers.map((index) => (
-							<option onClick={() => handleListItemClick(index)} key={index}>
-								{index.links[0].href}
-							</option>
-						))}
-					</TextField>
 				</DialogContent>
             <DialogActions>
                <Button onClick={handleClose} color="primary">
                   Cancel
                </Button>
-               <Button onClick={saveTraining} color="primary">
+               <Button onClick={addTraining} color="primary">
                   Save
                </Button>
             </DialogActions>

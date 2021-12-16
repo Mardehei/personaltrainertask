@@ -4,35 +4,34 @@ import 'react-table/react-table.css';
 import Button from '@material-ui/core/Button';
 import moment from 'moment';
 
-
 class TrainingsList extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {trainings: [], open: false, message: ''}
-    }
+   constructor(props) {
+      super(props);
+      this.state = {training: [], open: false, message: ''}
+   }
 
 componentDidMount() {
   this.fetchTrainings();
 }
 
 fetchTrainings = () => {
-    fetch('https://customerrest.herokuapp.com/gettrainings')
-    .then (response => response.json())
-    .then (jsondata => this.setState({trainings: jsondata}))
+   fetch('https://customerrest.herokuapp.com/gettrainings')
+   .then (response => response.json())
+   .then (jsondata => this.setState({training: jsondata}))
 }
 
 deleteTraining = (link) => {
-    if (window.confirm("Are you sure?")) {
+   if (window.confirm("Are you sure?")) {
       fetch('https://customerrest.herokuapp.com/api/trainings/' + link,
       {method: 'DELETE'})
       .then(response => this.fetchTrainings())
       .then(response => this.setState({open:true}))
       .catch(err => console.error(err))
-    }
+   }
 }
 
 handleClose = () => {
-    this.setState({open:false})
+   this.setState({open:false})
 }
 
    render() {
@@ -40,7 +39,7 @@ handleClose = () => {
          {
             Header: 'Date',
             accessor: 'date',
-             Cell: row => (
+            Cell: row => (
                <div>
                   {moment(row.value).format("D.M.YYYY - hh:mm")}
                </div>
@@ -71,7 +70,7 @@ handleClose = () => {
       return (
          <div>
             <h1>Trainings</h1>
-            <ReactTable filterable={true} data={this.state.trainings} columns={columns} />
+            <ReactTable filterable={true} data={this.state.training} columns={columns} />
          </div>
       );
    }

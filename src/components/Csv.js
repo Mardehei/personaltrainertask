@@ -9,7 +9,7 @@ class Csv extends Component {
          data: []
       }
 
-      this.csvLinEl = React.createRef();
+      this.csvLine = React.createRef();
       this.headers = [
          {label: 'First Name', key: 'firstname'},
          {label: 'Lastname', key: 'astname'},
@@ -30,7 +30,7 @@ class Csv extends Component {
       const data = await this.getCustomers();
       this.setState({data: data, loading: false}, () => {
          setTimeout(() => {
-         this.csvLinEl.current.link.click();
+         this.csvLine.current.link.click();
          });
       });
    }
@@ -49,7 +49,7 @@ class Csv extends Component {
             headers={this.CSVLink}
             data={data}
             filename='Customers.csv'
-            ref={this.csvLinEl}
+            ref={this.csvLine}
          />
       </div>
       );
